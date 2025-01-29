@@ -52,3 +52,11 @@ Meaning: Busy for 2 hours
 
 Message: d3!n
 Meaning: Need to see you urgently now
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Here’s how you can help:
+
+- 💡 Suggest new symbols
+- 📝 Improve documentation
