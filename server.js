@@ -22,6 +22,10 @@ webpush.setVapidDetails(
 app.use(express.static("public"));
 app.use(express.json());
 
+app.get("/service-worker.js", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "service-worker.js"));
+});
+
 // File paths
 const dataDir = path.join(__dirname, "data");
 const messagesFile = path.join(dataDir, "messages.json");
