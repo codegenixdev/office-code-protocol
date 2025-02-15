@@ -1,0 +1,18 @@
+{
+  "name": "ocp-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2",
+    "node-json-db": "^2.3.1",
+    "socket.io": "^4.8.1"
+  }
+}

@@ -1,0 +1,102 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+#login-screen {
+  max-width: 400px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+#chat-screen {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#chat-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+#messages {
+  height: 400px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.message {
+  margin: 5px 0;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+#shortcuts {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+}
+
+.shortcut-category {
+  margin-bottom: 15px;
+}
+
+.shortcut-category h4 {
+  margin: 0 0 5px 0;
+  color: #666;
+  font-size: 0.9em;
+}
+
+#shortcuts button {
+  margin: 0 5px 5px 0;
+  padding: 8px 12px;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+#shortcuts button:hover {
+  background-color: #d0d0d0;
+}
+
+#input-area {
+  display: flex;
+  gap: 10px;
+}
+
+#message-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#input-area button {
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#input-area button:hover {
+  background-color: #45a049;
+}
+
+.shortcut-category {
+  display: inline-block;
+  margin-right: 20px;
+  vertical-align: top;
+}

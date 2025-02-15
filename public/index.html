@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Office Code Protocol</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div id="login-screen">
+      <h1>Office Code Protocol</h1>
+      <h2>Enter Your Username</h2>
+      <input type="text" id="username-input" placeholder="Username" />
+      <button onclick="joinChat()">Join Chat</button>
+    </div>
+
+    <div id="chat-screen" style="display: none">
+      <div id="chat-container">
+        <div id="messages"></div>
+
+        <div id="shortcuts">
+          <div class="shortcut-category">
+            <h4>Core Symbols</h4>
+            <button onclick="appendSymbol('!')">!</button>
+            <button onclick="appendSymbol('?')">?</button>
+            <button onclick="appendSymbol('m')">m</button>
+            <button onclick="appendSymbol('*')">*</button>
+          </div>
+
+          <div class="shortcut-category">
+            <h4>Time Indicators</h4>
+            <button onclick="appendSymbol('h')">h</button>
+            <button onclick="appendSymbol('n')">n</button>
+            <button onclick="appendSymbol('m')">m</button>
+          </div>
+
+          <div class="shortcut-category">
+            <h4>Location Indicators</h4>
+            <button onclick="appendSymbol('c')">c</button>
+            <button onclick="appendSymbol('o')">o</button>
+            <button onclick="appendSymbol('d')">d</button>
+          </div>
+
+          <div class="shortcut-category">
+            <h4>Status Indicators</h4>
+            <button onclick="appendSymbol('b')">b</button>
+          </div>
+
+          <div class="shortcut-category">
+            <h4>Urgency Levels</h4>
+            <button onclick="appendSymbol('1!')">1!</button>
+            <button onclick="appendSymbol('2!')">2!</button>
+            <button onclick="appendSymbol('3!')">3!</button>
+          </div>
+        </div>
+
+        <div id="input-area">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Type your message..."
+          />
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const socket = io();
+      let username = "";
+
+      function joinChat() {
+        username = document.getElementById("username-input").value.trim();
+        if (username) {
+          document.getElementById("login-screen").style.display = "none";
+          document.getElementById("chat-screen").style.display = "block";
+          socket.emit("join", username);
+        }
+      }
+
+      function appendSymbol(symbol) {
+        const input = document.getElementById("message-input");
+        const cursorPos = input.selectionStart;
+        const currentValue = input.value;
+
+        // Insert symbol at cursor position
+        const newValue =
+          currentValue.slice(0, cursorPos) +
+          symbol +
+          currentValue.slice(cursorPos);
+        input.value = newValue;
+
+        // Move cursor after the inserted symbol
+        const newCursorPos = cursorPos + symbol.length;
+        input.setSelectionRange(newCursorPos, newCursorPos);
+
+        // Focus back on input
+        input.focus();
+      }
+
+      function sendMessage() {
+        const input = document.getElementById("message-input");
+        const message = input.value.trim();
+        if (message) {
+          socket.emit("chatMessage", message);
+          input.value = "";
+        }
+      }
+
+      socket.on("message", (data) => {
+        const messagesDiv = document.getElementById("messages");
+        const messageElement = document.createElement("div");
+        messageElement.className = "message";
+        messageElement.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+        messagesDiv.appendChild(messageElement);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        if (!document.hasFocus()) {
+          new Notification("New Message", {
+            body: `${data.username}: ${data.message}`,
+          });
+        }
+      });
+
+      socket.on("loadMessages", (messages) => {
+        const messagesDiv = document.getElementById("messages");
+        messages.forEach((data) => {
+          const messageElement = document.createElement("div");
+          messageElement.className = "message";
+          messageElement.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+          messagesDiv.appendChild(messageElement);
+        });
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      });
+
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
+
+      document
+        .getElementById("message-input")
+        .addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+    </script>
+  </body>
+</html>
