@@ -100,3 +100,19 @@ body {
   margin-right: 20px;
   vertical-align: top;
 }
+
+.notification-permission {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.notification-permission.show {
+  display: block;
+}

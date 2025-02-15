@@ -3,13 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Office Code Protocol</title>
+    <title>Office Chat Room</title>
     <link rel="stylesheet" href="style.css" />
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <div id="login-screen">
-      <h1>Office Code Protocol</h1>
       <h2>Enter Your Username</h2>
       <input type="text" id="username-input" placeholder="Username" />
       <button onclick="joinChat()">Join Chat</button>
@@ -68,6 +67,39 @@
 
     <script>
       const socket = io();
+      let swRegistration = null;
+
+      // Register service worker and handle push notifications
+      if ("serviceWorker" in navigator && "PushManager" in window) {
+        navigator.serviceWorker
+          .register("service-worker.js")
+          .then(function (registration) {
+            console.log("Service Worker registered");
+            swRegistration = registration;
+            initializePushNotifications();
+          })
+          .catch(function (error) {
+            console.error("Service Worker Error", error);
+          });
+      }
+
+      async function initializePushNotifications() {
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission === "granted") {
+            const subscription = await swRegistration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: "YOUR_VAPID_PUBLIC_KEY", // You'll need to generate this
+            });
+
+            // Send subscription to server
+            socket.emit("pushSubscription", subscription);
+          }
+        } catch (error) {
+          console.error("Error setting up push notifications:", error);
+        }
+      }
+
       let username = "";
 
       function joinChat() {
